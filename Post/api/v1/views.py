@@ -3,6 +3,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from Post.models import Post
+from django.contrib.auth.models import User
 from .serializers import PostsSerializer
 
 class PostList(APIView):
@@ -22,9 +23,9 @@ class PostList(APIView):
 
 
 @api_view(['GET', ])
-def api_detail_post_view(request, id):
+def api_detail_post_view(request, title):
     try:
-        target_post = Post.objects.get(id=id)
+        target_post = Post.objects.get(title=title)
     except Post.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)        
     
@@ -41,4 +42,4 @@ def api_posts_view(request):
     
     if request.method == "GET":
         serializer = PostsSerializer(target_post)
-        return Response(serializer.data)
+        return Response(serializer.data)       
